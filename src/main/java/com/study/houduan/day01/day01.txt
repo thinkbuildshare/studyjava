@@ -1,0 +1,259 @@
+
+-------------------------------------------------------------
+下载           飞鸽(传送文件)   凌波(教师广播)   ediplus(强大的文本编辑工具)
+---------------------------------------------------------------
+安装MyEclipse注意点;
+                        路径不要出项特殊字符  空格等
+                        不要出现中文字符(出现乱码问题)
+                       
+ 常见的开发工具:
+                            JCreator:适用于Java基础语法的一个学习
+                            JBuilder
+                            NetBeans
+                                            上面比较慢
+                            Eclipse
+                                        目前市场上企业里面用的比较多的,免费
+                            MyEclipse
+                                        其实也属于Eclipse的体系,收费的
+                                        适用于后期的WEB应用程序的开发
+
+简单介绍Eclipse和MyEclipse
+                              
+
+
+软件开发:
+      什么是软件?
+              由一系列按照特定顺序组织的计算机的数据和指令的集合
+              系统软件:
+                          DOS(Disk Operating System):磁盘操作系统
+                          windows
+                          Linux
+                          Mac OS
+              应用软件:
+                        QQ  迅雷   .........
+        开发:
+                制作软件
+
+           软件的诞生实现了人与计算机很好的交互
+           交互方式:
+                      图形化界面方式(GUI Graphical User Interface):
+                              操作简单,傻瓜式操作
+                      命令行方式(CLI   Command Line Interface):
+                              需要一个控制台,需要记忆大量的命令
+          ------------------------------------------------------------------------------------
+语言:
+            人与人交流的方式
+
+计算机语言:人与计算机交流的方式
+语言的发展:
+              1.机器语言
+              2.汇编语言:依赖于机器语言的低级语言
+              3.高级语言:面向过程的:C  C++(不纯的)
+                                面向对象的:Java  C#
+               
+              Java之父(James Gosling):詹姆斯  高斯林
+                      Java前身Oak   但是童年商标搜索的时候,已经被显卡制造商注册了,,,同年改名叫做Java
+              SUN(Stanford University NetWork  斯坦福大学网络公司)
+              2010年10月24日    被现在是全球第二大的数据软件公司-->甲骨文公司(Oracle)收购的
+             
+             Java语言是SUN公司在92年推出的高级编程语言,96年上市的
+              Java支持的体系结构(三个平台)
+                            1.JavaSE(Java Standard Edition):Java 标准版
+                                  主要用来桌面程序的开发
+                             2.JavaEE(Java Enterprise Edition):Java企业版
+                                      不是单纯的一门技术,它是为应用程序的开发提供的一整套的解决方案
+                                      (EJB   JSP  SERVLET JQUERY)
+                             3.JavaME(Java Micro Edition):Java微型版
+                                            是JavaSE的一个子集
+                                产品级开发(电子消费品   手机里面的应用程序)
+                                Google公司的Android取代了
+                                苹果公司的IOS
+                                微软的window phone
+------------------------------------------------------------------------------------------------------------------------------------
+简单的一些DOS命令:前提是进入一个控制台  运行--cmd
+                1.盘符名:    比如f:      进入f盘
+                2.cd 路径     比如temp      cd temp
+                3.cd  ..      返回当前目录的上一层目录
+                4.cd\         返回当前目录的根目录
+                5.   .         当前目录
+                6.md 文件夹名       创建文件夹
+                7.cd.>文件名.后缀名    新建文件
+                8.del 文件名.后缀名    删除文件
+                9.rd /s/q 文件夹名    强制删除
+                        注意如果说文件夹下面非空,则采用上面的方式,反之  rd 文件夹名
+                10.cls  清屏
+                11 编辑文件  edit 文件名.后缀名
+------------------------------------------------------------------------------------------------------------------
+Java语言的特点:
+                  简单的/安全的/可移植的/多线程的/动态的/面向对象的/与平台无关性的(跨平台)
+Java语言环境的搭建:
+                     JVM(Java Virtual Machine) :Java 虚拟机(可以想成以.class字节码文件为指令的CPU)
+                     正是因为有了它,所以Java 才具有跨操作系统平台的特点
+                     Java 具有"一次编译  到处运行"
+
+                     JRE(Java Runtime Enviroment):Java 运行时环境
+                                    包括JVM和一些核心内库
+                              如果用户只需要运行一个完好的Java程序
+                              他只需要在电脑里安装JRE即可
+                      JDK(Java Development KIT):Java 开发工具包
+                              包含JRE和Java开发工具
+                              供开发者使用的,如果你已经安装了JDK,无需再单独去安装JRE了
+                             开发工具:编译(javac.exe)   运行(java.exe)    打包(jar.exe) 
+
+API:application programming Interface:应用程序接口   
+                                          提供了预定义好的函数
+                                        给应用程序和开发人员基于某软件或者硬件
+                                        访问某一例程的能力,无需访问源代码,并且不需要了解其内部工作机制的细节
+
+
+环境变量的配置
+                      JAVA_HOME:JDK的安装路径
+                      path:windows系统执行命令时去检查的路径
+                      classpath:Java编译和运行时去检查的路径
+                              %JAVA_HOME%\bin;
+             编译器                                               解释器(JVM)
+.java------------------->.class文件(字节码文件)---------------------->结果
+           javac
+编译:javac HelloWorld.java
+运行:java HelloWorld
+
+Java是解释型语言
+
+如果有包
+                    javac  -d ..\bin com\tz\day01\HelloWorld.java
+                    java -cp ..\bin com.tz.day01.HelloWorld
+
+------------------------------------------------------------------------------------------------------
+JDK发展95年到现在经过了哪些版本:
+                      1.0  1.1  1.2             1.5             1.6          1.7       1.8(8u4)
+下载地址:www.oracle.com       DownLoads
+目前用的最多的是1.6
+安装注意:
+                      不能出现在中文路径下面
+                       不能出现特殊字符  以及  空格  以及()
+--------------------------------------------------------------------------------------------------
+Java程序简单体检:
+                    package xxx.xxx.xxx
+                    import    xxx.xxx.xx                //导包
+                   修饰符   class    类名{
+                              //方法   main方法   程序的主入口
+                              public static void main(String[] args){
+                                      //方法体
+                              }
+----------------------------------------------------------------------------------------------
+
+新建一个文件名为HelloWorld.java
+以.java结尾的文件叫做Java 的源文件
+                            public class HelloWorld{
+                                      public static void main(String[] args){
+                                          System.out.println("welcome to learn Java!");
+                                      }
+                            }
+注意:
+              1.类名要和文件名高度一致,要满足驼峰命名规则
+                    类名的首字母要大写
+               2.类名可以是中文,但是不推荐使用,防止出现乱码
+               3.类名是由数字 _  $  字母组成的,并且不能以数字开头
+               4.不能是以下三个字面量:null true false
+               5.不能是Java的保留字:const   goto
+               6.不能是Java关键字:
+                                abstract boolean public class void static 
+                                char short int long byte double float  final
+                                synchronized......
+                 7.注意一点String 不是Java关键字
+           
+             包:关键字package
+                    用来管理类
+              包名的命名:一般是采用全小写 并且以 .  隔开
+                                通常是公司域名的倒置+项目代号
+
+                               com.tz.day01
+                               com.baidu.search
+                类名:xxx.xxx.xxx.HelloWorld 
+                        也叫做类的全限定名    简称HelloWorld
+----------------------------------------------------------------------------------------
+注释:(编译器会跳过它)
+          //                单行注释
+
+          /*
+          *    多行文本注释
+          *    
+          */
+        
+          /**
+          * 
+          *    注释方法和类 
+          */
+          可以通过我们的javadoc工具来生成我们的API文档树
+
+    常用的标记:
+                  @author    作者
+                  @since      从哪个本版开始
+                  @see         另参见
+                  @param      参数
+                  @deprecated 已过时
+-----------------------------------------------------------------------------------------------
+JVM启动的时候,其实开启了俩个线程
+    main()
+    gc:守护线程   垃圾回收机制
+          回收的是没有任何引用指向的对象,这些对象占了内存空间,JVM在空闲的时候会去检查
+          发现是这样的情况就会回收
+         
+         能否通过代码来通知JVM来回收垃圾对象呢?
+                  System.gc();
+                  Runtime.getRuntime().gc();
+
+                  注意:并不是你调用了gc()方法,JVM就立即去执行,你只是告诉了它一下
+                         但是具体回收还得看JVM(因为JVM自己内部有自己的一套垃圾回收机制的算法)
+                   俩种垃圾回收机制:
+                                    1.引用计数
+                                    2.对象遍历
+-------------------------------------------------------------------------------------------------
+获取键盘输入:
+                      import java.util.Scanner;
+                    注意:凡是java.lang包下的类都不需要我们自己导入
+                  
+
+                  //第一步:定义package
+ScannerDemo.java
+                  package com.tz.day01;
+                  import java.util.Scanner;
+                  //import  java.util.*      这样子也是可以的,但是效率比较低
+
+                  public class ScannerDemo{
+                        public static void main(String[] args){
+                                  //1.创建一个Scanner对象
+                                  Scanner sc = new Scanner(System.in);
+                                  //2.通过sc这个对象去调用方法
+                                  //对象名.方法名
+                                  System.out.pirntln("请您输入您的姓名:");
+                                  String name = sc.nextLine();//程序运行到此处将会阻塞  
+                                  System.out.println("您刚刚输入的姓名是:"+name);
+                         }
+                  }
+
+总结:
+            nextInt():获取的是整数型的数据
+            nextLine():获取的是字符创类型的数据
+            nextDouble():获取的是小数类型的数据
+
+         注意点:nextInt()与nextLine()不要混用  
+                    混用的时候会导致nextLine()失效
+----------------------------------------------------------------------------------------
+注意:
+          如果你想换一个workspace 那里面的JDK以及JRE都要重新再去配置
+          JDK的版本要和编译器的版本号要一致
+
+
+
+
+
+
+
+
+
+
+
+
+
+

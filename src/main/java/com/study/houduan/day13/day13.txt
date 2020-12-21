@@ -1,0 +1,210 @@
+Java 高级应用之IO流
+---------------------------------------------
+Java IO流
+        作用:就是用来加载本地或者远程的文件,
+                也支持对二进制文件或者字符文件的读写.
+如何将文件映射成Java的对象?
+-----------------------------------------------------------------------
+Java提供了java.io.File
+        但是注意一点:只能对文件夹或者文件的本身信息进行读取,
+                              但是不能读写文件里面的内容,操作文件里面的内容需要
+                              用到流(Stream)
+        
+        构造方法:
+              public File(String path);//通过一个指定的路径来构建一个File实例
+              public File(File parent, String child) ;
+              public File(String parent,String child);
+
+       常用方法:
+          业务判断方法:
+                delete();//删除此抽象路径名下的文件或者文件夹
+                            //注意:文件可以直接删除,但是文件夹必须为空才能删
+                 
+                exists() ;//判断路径下是否存在了该文件或者文件夹
+
+                isDirectory() ;//判断是文件还是文件夹
+
+                isFile();//判断是否文件
+   --------------------------------------------------------------------     
+               
+           文件或者文件夹创建的:
+                mkdir() :
+                mkdirs():
+                      ---上面两个都是用来创建目录的,但是后者可以创建多层次结构的目录
+                createNewFile() ;//创建一个空文件
+---------------------------------------------------------------------------------------------
+            获取文件或者文件夹信息的有:
+                length();//判断文件的长度
+          
+                listFiles();//输出指定目录下面的所有文件
+
+                listFiles(FilterName fiterName);//输出指定目录下面的指定后缀的文件
+
+                getAbsolutePath() ;//得到该文件或者文件夹的绝对路径
+
+                getName();//得到文件或者文件夹的名称
+
+                getParent() ;//获取指定父目录路径
+
+                getPath() ;//将抽象路径转换成字符串表现形式
+-----------------------------------------------------------------------------------------------------
+Java IO流(Stream):
+               作用: 从源头到目标不停地搬运内容的对象
+
+               源头:网络,键盘,网盘.....
+               目标:网络,网盘,硬盘,显示器......
+              
+          类进行分类:按照流的类型可以分成输入流(InputStream)和输出流(OutputStream)
+
+          输入:由外界到JVM
+          输出:由JVM到外界
+
+        按照功能分为字节流和字符流
+
+        字节输入流:java.io.InputStream      IO流的顶级抽象父类
+                        --ByteArrayInputStream  操作字节数组的输入流
+                        --FileInputStream            操作文件的输入流
+                        --ObjectInputStream        操作对象类型的输入流
+                        -- FilterInputStream         过滤输入流
+                            \\--BufferedInputStream  带缓存功能的输入流
+                            \\--DataInputStream       操作基本类型的输入流
+        公用方法:
+                        read();//每次只能读单个字节
+                        read(byte[] buf);//每次读取的内容放到缓冲区byte中
+                                                //如果到达文件末尾,没有流可读,返回-1
+                        read(byte[] buf,int off,int len);
+                              b - 读入数据的缓冲区。
+                              off - 数组 b 中将写入数据的初始偏移量。
+                              len - 要读取的最大字节数。
+                         close();关闭流
+         
+         字节输出流:  java.io.OutputStream     字节输出流的顶级抽象父类
+                        --ByteArrayOutputStream  操作字节数组的输出流
+                        --FileOutputStream            操作文件的输出流
+                        --ObjectOutputStream        操作对象类型的输出流
+                        -- FilterOutputStream         过滤输出流
+                            \\--BufferedOutputStream  带缓存功能的输出流
+                            \\--DataOutputStream       操作基本类型的输出流
+         公用方法:
+                        write();//每次写单个字节
+                        write(byte[] b) ;将 b.length 个字节从指定的 byte 数组写入此输出流
+                        write(byte[] b, int off, int len) ; 将指定 byte 数组中从偏移量 off 开始的 len 个字节写入此输出流。
+                        close();//关闭流
+//步骤:
+      1.定位源头和目标
+      2.初始化源头和目标
+      3.循环读取
+                  进行业务操作(加密,复制,写入...)
+      4.关闭流
+
+案例:实现文件的拷贝
+-------------------------------------------------------------------------------------------------
+IO流框架的设计思想
+[装饰模式]也称为"油漆工"模式
+
+就是把我们的类分成两大类,一个叫做基础类(节点流),一个叫做拓展类(过滤流)
+基础类是具有真正的读写能力的,但是拓展类只是用来进行功能拓展
+本身不具备真正的读写能力,它需要以基础类作为支撑
+
+节点流:
+        ByteArrayInputStream/ByteArrayOutputStream
+        FileInputStream/FileOutputStream
+过滤流:
+        ObjectInputStream/ObjectOutputStream
+        FilterInputStream/FileterOutputStream
+        BufferedInputStream/BufferedOutputStream
+        DataInputStream/DataOutputStream
+
+        IO流之所以这样设计,就是可以任意组合节点流和过滤流
+
+        比如:1.构建一个带缓存的文件输入流
+        BufferedInputStream bs = new BufferedInputStream(new FileInputStream(String path));
+-----------------------------------------------------------------------------------------------------------------------------
+读取对象类型(本质就是对象的序列化)
+Java对象序列化的要求:
+1)要求被序列化的对象必须要是吸纳java.io.Serializable接口
+2)如果自定义类中有其他自定义类型的属性,则这个属性也要实现序列化接口
+3)如果序列化一个集合对象,则要求集合中的所有元素都必须实现序列化接口
+
+瞬态关键字:transient
+如果序列化的对象,不想持久化某一个或者多个属性,则可以使用此关键字来修饰这个属性
+-----------------------------------------------------------------------------------------------------------------------------
+字符流:作用是用来操作文本文件的
+        字符输入流
+                  java.io.Reader  字符输入流的顶级抽象父类
+                        ---CharArrayReader  操作字符数组的输入流
+                        ---FilterReader           过滤输入流
+                        ---StringReader          操作字符串的输入流
+                        ---InputStreamReader  桥接器  (是字节流通向字符流的桥梁)
+                        ---FileReader             操作文件的输入流
+                        ---BufferedReader      带缓存功能的字符输入流
+        公用方法:
+                readLine();//读取一整行文本
+        字符输出流:
+                  java.io.Writer   字符输出流的顶级抽象父类
+                      ----PrintWriter   它是节点流
+                          特点:1.自带缓存功能
+                                  2.关闭流不需要抓异常
+                           write();//写入
+                           print();
+                           println();//写入   线程安全的
+                      ----FileWriter  操作文件的字符输出流
+-------------------------------------------------------------------------------------------------------------
+笔试题:java.util.Scanner 类是用来获取键盘输入的,不允许用此类
+            来实现获取键盘输入
+           用桥接器 InputStreamReader来实现的
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

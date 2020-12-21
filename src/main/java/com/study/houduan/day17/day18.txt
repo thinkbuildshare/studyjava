@@ -1,0 +1,85 @@
+对象之间的关系:
+        1.关联:强调的是平等
+        2.聚合:强调的是整体和局部的关系,但是整体不负责局部的生命周期
+        3.组合:强用的也是整体和局部的关系,但是征途负责局部的生命周期
+
+        关系由强到弱    组合>聚合>关联
+
+        特点:1.方向性
+                2.多重性:
+                      1:1:比如一个丈夫(husband)对应一个妻子(wife)
+                      1:N:比如一个客户(Customer)对应多个订单(Order)
+                            public class Customer{
+                                  .....
+                                  private List<Order> orders;
+                            }
+
+纵向关系:[父子类   A IS B]
+        继承  extends
+        实现  implements
+横向关系:
+        1.关联:强调的是平等,一个类中拥有另一个类的实例作为属性
+                    比如:主机(Host)和显示器(Display)
+
+                    public class Host{
+                          ....
+                          private Display display;
+                    }
+
+                    public class Display{
+                          .....
+                          ....
+                    }
+          2.聚合:强调的是整体和局部的关系,但是整体不负责局部的生命周期
+                     代码形式和关联是一样的,只能从语义上进行区分
+                      
+                      比如:主机和CPU
+
+                      public class Cpu{
+                            ...
+                      }
+                      public class Host{
+                            ......
+                            private Cpu cpu;
+                            public Host(Cpu cpu){
+                                  this.cpu = cpu;//聚合
+                            }
+                      }
+              
+             3.组合:强调的是整体和局部的关系,但是整体负责局部的生命周期
+                        比如:人和胳膊
+
+                        public class Hand{
+                                  ...
+                        }
+
+                        public class Person{
+                              private Hand hand;
+
+                              public Person(){
+                                    this.hand = new Hand();//组合    
+                              } 
+                        }
+             4.依赖:一个类中使用了另一个类
+                  比如:
+                      public class A{
+                              ...
+                      }
+
+                      public class B{
+                              public void method(A a){//依赖
+                                    a.method();
+                              }
+                      }
+             注意:一般工厂类依赖于父子类
+-----------------------------------------------------------------------------------------------------
+UML:Unified Model Language  统一建模语言
+每种关系对应的OOAD的标准图形是:
+继承:实线+空心三角形
+实现:虚线+空心三角形
+关联:实线+箭头
+依赖:虚线+箭头
+组合:实线+实心菱形
+聚合:实线+空心菱形
+--------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,358 @@
+day10笔记
+提纲:1.java.lang.Object
+            重点讲解:getClass()  toString()    clone()     equals和hashCode()   finalize()
+        2.基本类型和对应的包装类型以及其中的常用方法
+        3.Java对字符串的处理   java.lang.String
+                                             java.lang.StringBuffer
+                                             java.lang.StringBuilder
+ ----------------------------------------------------------------------------------------------------------------------
+ 知识点1:
+          java.lang.Object   
+          Object类是所有类的基础类,所有的类都是间接或者直接去继承它.
+          
+          常用方法:
+                   1.getClass()方法
+                   public final Class<?> getClass();//获取运行时类型
+
+                   注意一点:一个类无论被实例化多少次,它在JVM中的class实例只有1个
+                   比如:Student s1 = new Student();
+                           Student s2 = new Student();
+                           System.out.println(s1.getClass()==s2.getClass());//true
+                 java.lang.Class<?>
+                    JVM当中描述类的类,有了它,我们就可以获取类的所有信息
+                    它是反射技术的基础类
+            JVM中如何获取Class实例,5种方式
+            1.对象名.getClass();
+            2.类名.class
+            3.Class.forName("类的全限定名");//此方法要求强制处理异常
+               注意:如果传入的类的全限定名错误,则会抛出java.lang.ClassNotFoundException异常
+            4.基本类型.class
+            5.包装类型.class
+----------------------------------------------------------------------------------------------------------------------------------------
+2.toString()
+        作用:将对象转换成字符串的表现形式
+
+        getClass()+'@'+Integer.toHexString(hashCode());
+
+        注意:一般对象都会去自动调用该方法,通常我们都要重写该方法
+                因为原版的打印内容不符合我们的业务要求.
+
+                如果打印对象不是出现上面的形式,那么它或者它父类当中肯定重写了该方法
+----------------------------------------------------------------------------------------------------------------------------------------
+3.equals()方法
+        1.==比较的是内存地址
+        2.equals方法中,基本类型用==比较,对象调用equals方法,
+           默认比较的也是内存地址,一般都会选择去重写它,让它比较对象中的值
+        3.String和Date已经重写过equals方法
+       
+       重写equals步骤:
+       1.非空性
+       2.自反性
+       3.对称性
+       4.一致性
+       5.传递性
+
+      public boolean equals(Object obj){
+              //1.非空性
+              if(null==obj){
+                  return false;
+              }
+              //2.自反性
+              if(this==obj){
+                  return true;
+              }
+              //3.类型判断
+              if(obj instanceof Student){
+                    Student s = (Student)obj;//强制类型转换
+                    return s.getName().equals(name)
+              }
+              return false;
+      }
+hashCode():哈希码
+          作用:主要是用来查询
+
+          注意: 1.一般equals方法和hashCode()方法成对出现
+                   2.相同对象(s1.equals(s2)返回true),保证哈希值要相同
+                   3.不同对象,尽可能保证哈希值不同
+                   4.equals方法中出现的属性一定也要出现在hashCode()方法中
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+clone()方法:
+            就是将对象拷贝一份给副本,Object当中的clone方法都是浅层复制
+
+            protected Object clone() throws CloneNotSupportedException
+            浅层复制:也称为浅拷贝  就是将基本类型拷贝一份给副本,对象类型共享
+            深层复制:也称为深拷贝  所有类型都拷贝一份给副本,需要我们手动写代码.
+
+            注意点:1.String和Date类型除外
+                        2.被克隆的实体类要去实现Cloneable接口,否则会抛出
+                           CloneNotSupportedException
+                        3.protected改成public 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+finalize():
+              protected void finalize() throws Throwable
+              1.它是由JVM来调用的而非人为调用
+              2.作用:JVM将对象清理出内存之前的做的一些必要的清理工作
+笔试题:final  finally  finalize  之间的区别
+            final:表示最终的,final修饰的变量叫做常量,一旦赋值了就不允许修改
+                    final修饰的方法,不允许重写
+                    final修饰的类,不允许继承
+            finally:一般是和try{}catch(){}块连用的,程序一旦出现异常,就会进入到相应的catch块中
+                     但是无论程序是否出现异常,都会执行finally中的程序,除非出现System.exit(0)中断虚拟机进程
+                     注意一点finally在return之前执行的
+                     finally块中一般是用来做资源释放/连接池关闭/IO关闭等操作
+            finalize():由JVM调用,不管程序抛不抛异常,finalize()不会抛异常,并且程序可
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+基本类型和它对应的包装类型(包装类型也是对象)
+byte-------------->Byte
+short------------->Short
+int---------------->Integer
+long-------------->Long
+double---------->Double
+float------------->Float
+char-------------->Character
+boolean--------->Boolean
+
+以上6种数字类型的包装类型的父类都是java.lang.Number
+          Number是一个抽象类
+
+          byteValue   以byte形式返回指定的数值
+          shortValue  以short形式返回指定的数值
+          doubleValue 以double形式返回指定的数值
+          intValue        以int形式返回指定的数值
+          floatValue     以float形式返回指定的数值
+          longValue    以long形式返回指定的数值
+--------------------------------------------------------------------------------------
+Integer:
+          java.lang.Integer
+
+          1.构造方法
+              public Integer(String s);//将字符串转换成Integer
+                                                 //注意:如果传入的字符串不是数字类型的,会抛出java.lang.NumberFormatException
+              public Integer(int i);//将基本类型转换成Integer
+          2.常量
+                  MAX_VALUE   int类型的最大值  2^31-1
+                  MIN_VALUE    int 类型的最小值  -2^31
+          3.基本类型和包装类型之间可以相互转换
+              JDK5.0以后,支持自动解封箱(Auto Boxing/unBoxing)
+
+              Integer i = 5;//自动封箱
+              int i2 = i;//自动解箱
+           4.常用方法:
+                      public static int parseInt(String s);//将字符串解析成int类型
+                      public static Integer valueOf(String s);//将字符串转换成Integer
+                      public static Integer valueOf(int i);//将int类型转换成Integer
+                      public String toString();//将Integer转换成字符串
+
+                      public static String toBinaryString(int i);//转换成二进制
+                      public static String toHexString(int i);//转换成十六进制
+                      public static String toOctalString(int i);//转换成八进制
+---------------------------------------------------------------------------------------------------------------
+Character
+          字符集
+
+          1.构造方法:
+                  public Character(char ch);
+           2.常用方法:
+                    public static boolean isDigit(char ch);//判断该字符是否为数字
+
+                    public static boolean  isLetter(char ch);//判断该字符是否为字母
+
+                    public static boolean isLowerCase(char ch);//判断该字符是否为小写
+
+                    public static boolean isUpperCase(char ch);//判断该字符是否为大写
+
+                    public static boolean isWhitespace(char ch);//判断该字符是否为空白
+
+                    public static Character valueOf(char c);//char转换成Character
+-------------------------------------------------------------------------------------------------------------------
+ Boolean
+        1.构造方法
+          public Boolean(boolean b);//将boolean转换成Boolean
+          public Boolean(String s);//将String类型转换成Boolean
+                                            
+         2.常用方法
+              public static boolean parseBoolean(String s);//将字符串解析成布尔类型
+                                                                            //  //注意:当且仅当String是"true"结果返回true
+                                                                            //其他全部是false
+              public static Boolean valueOf(String s);//..........
+              public static Boolean valueOf(boolean b);//..............
+--------------------------------------------------------------------------------------------------------------------------------------
+BigInteger
+        大整数型数据类型
+        1.构造
+        2.常量
+        3.方法
+        4.案例   阶乘
+
+                    public static int fac(int i){
+                          //1.指定递归出口
+                          if(i==1){
+                                return 1;....
+                          }
+                          return i*fac(i-1)
+                          .....
+                    }
+BigDecimal
+         大浮点型数据类型
+-------------------------------------------------------------------------------------------------
+java.text.NumberFormat
+          格式化数字类
+---------------------------------------------------------------------------------------------------
+Java关于字符串的处理
+              1.String类   是final类型的
+              
+              2.构建构建String对象
+                  a.通过new关键字申请空间  String s = new String("xyz")
+                  b.通过串池的方式,此效率比较高,比较第二次创建字符串的时候,会
+                     先到串池当中去找有没有创建过.
+                     String s = "abc";
+              3.字符串拼接  +=   效率低下
+                 通常是采用java.lang.StringBuilder中的append方法来替代
+
+                 java.lang.StringBuilder   轻量级字符串处理类 效率高  线程不安全
+                 java.lang.StringBuffer     重量级....   线程安全      效率低
+---------------------------------------------------------------------------------------------------------------------
+java.lang.String
+常用方法:
+  //1.返回指定索引处的char值  索引从0开始
+		System.out.println(new String("ABC").charAt(2));//C
+		//2.按照字典顺序比较两个字符串
+		System.out.println(new String("我").compareTo(new String("你")));
+		//3.在字符串的末尾拼接
+		System.out.println(new String("ABC").concat("DE"));//ABCDE
+		//4.当且仅当此字符串包含指定的 char 值序列时，返回 true
+		System.out.println(new String("1+1").contains("+"));//true
+		//5.endsWith(String suffix)   测试此字符串是否以指定的后缀结束。
+		System.out.println(new String("ABCDE").endsWith("DE"));//true
+		//6.将此 String 与另一个 String 比较，不考虑大小写。
+		System.out.println(new String("a").equalsIgnoreCase(new String("A")));//true
+		//7.返回指定字符在此字符串中第一次出现处的索引
+		System.out.println(new String("你好!我好!大家好!").indexOf("好"));//1
+		//8.返回在此字符串中第一次出现指定字符处的索引，从指定的索引开始搜索。
+		System.out.println(new String("你坏!我坏!她更坏!").indexOf("坏", 2));//4
+		//9.当且仅当 length() 为 0 时返回 true
+		System.out.println(new String("   ").isEmpty());//false
+		//10.返回指定字符在此字符串中最后一次出现处的索引。
+		System.out.println(new String("你好!我好!大家好!").lastIndexOf("好"));//8
+		//11. 返回指定字符在此字符串中最后一次出现处的索引，从指定的索引处开始进行反向搜索。
+		System.out.println(new String("你好!我好!大家好!").lastIndexOf("好",7));//4
+		//12.返回此字符串的长度
+		System.out.println(new String("I love He").length());//9
+		//13.返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的。
+		System.out.println(new String("I love Java").replace("Java", "美女"));
+		//14.根据给定正则表达式的匹配拆分此字符串  192.168.0.41
+		String[] arr = new String("192.168.0.41").split("\\.");//可以传入正则
+		System.out.println(Arrays.toString(arr));
+		//15.字符串的本质是char类型的数组
+		char c[] = {'a','b','c'};
+		System.out.println(c);//abc
+		//16.返回字符串的副本，忽略前导空白和尾部空白  去的头跟尾的空
+		System.out.println(new String(" ab c ").trim().length());//4
+		//17.将其他类型转换成String
+		//比如将int类型转换成String
+		String s = String.valueOf(2);
+		System.out.println(s+1);//21
+		//18.startsWith(String prefix)  以..开头
+		//19.toLowerCase()   转小写
+		//20.toUpperCase()   转大写
+		
+		//21 截取
+		// 返回一个新的字符串，它是此字符串的一个子字符串。
+		System.out.println(new String("ABC,DE").substring(2));//C,DE
+		//22.返回一个新字符串，它是此字符串的一个子字符串。[start,end)
+		System.out.println(new String("ABC,DE").substring(1, 4));//BC,
+		//23.将此字符串转换为一个新的字符数组。
+		char[] cstr = new String("ABC").toCharArray();
+		System.out.println(cstr);//ABC
+ -----------------------------------------------------------------------------------------------------------------------------
+ java.lang.StringBuilder
+ 常用方法:
+          //1.构建StringBuilder
+		StringBuilder s = new StringBuilder("abc");
+		StringBuilder s2 = new StringBuilder(123);
+		//2.append  拼接
+		System.out.println(new StringBuilder("abc").append("DE"));
+		//3.返回当前容量  默认的是16
+		System.out.println(new StringBuilder("abc").capacity());//19
+		//4. 返回长度（字符数）。
+		System.out.println(new StringBuilder("abc").length());//3
+		//5.返回此序列中指定索引处的 char 值
+		System.out.println(new StringBuilder("acv").charAt(1));//c
+		//6.移除此序列的子字符串中的字符。[start,end)
+		System.out.println(new StringBuilder("I love gan you").delete(7,11));//I love you
+		//7.  移除此序列指定位置上的 char。
+		System.out.println(new StringBuilder("I love gan you").deleteCharAt(0));//I love you
+		//8.indexOf  同String
+		//9. 将 char 参数的字符串表示形式插入此序列中。
+		System.out.println(new StringBuilder("I love gan you").insert(2, "very "));
+		//10.lastIndexOf  同上
+		//11.使用给定 String 中的字符替换此序列的子字符串中的字符。
+		System.out.println(new StringBuilder("I love Java").replace(7, 10, "*"));
+		//12.将此字符序列用其反转形式取代
+		System.out.println(new StringBuilder("0101").reverse());
+		//13.将给定索引处的字符设置为 ch。
+		StringBuilder builder = new StringBuilder("ABC");
+		builder.setCharAt(1, 'D');
+		System.out.println(builder);//ADC
+		//14.subString()同String方法一样
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

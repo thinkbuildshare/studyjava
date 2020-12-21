@@ -1,0 +1,176 @@
+提纲
+        1.属性文件
+        2.集合的一些细节操作
+        3.泛型
+        4.枚举
+--------------------------------------------------------------------------------------------
+知识点1:
+        java.util.Properties
+        它也是Map的一个实现类,继承于HashTable
+        在Java中有一个类的形式是文本文件,也就是属性文件.properties
+        里面也是以键值对KEY-VALUE的形式来存储数据的,
+        只不过跟Map的区别在于,它里面的KEY-VALUE只能是String类型的
+
+        KEY1-VALUE1
+        KEY2-VALUE2
+
+        注意:#内容  --->注释   注释的内容不属于属性文件
+
+常用方法:
+        构造方法:
+              public Properties();
+
+              get(Object key);//通过键获取值
+
+              load(InputStream in);//加载属性文件
+        
+        总结:JVM成功加载属性文件步骤
+                第一步:确定属性文件的路径
+                             private static final String PATH="com/tz/day12/Message.properties";
+                第二步:读取属性文件
+                            InputStream in = Thread.currentThread()
+                                                      .getContextClassLoader()
+                                                      .getResourceAsStream(PATH);
+                第三步:加载属性文件
+                            prop.load(in);//要强制处理异常
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+知识点2:集合的一些细节操作
+            List<Book> list1 = new ArrayList<>();
+            list1.add(b1);
+            list1.add(b2);
+            list1.add(b3);
+            ..............
+            我们可以通过一个集合来构建另一个集合
+            List<Book> list2 = new ArrayList<>(list1);
+            在此处list1和list2是两个不同的集合对象,但是这两个集合当中的元素对象是相同的
+
+            这里就涉及到集合的两种结构修改
+            一种叫做结构性修改,对集合本身进行修改
+                 比如:add  remove  shuffle
+                 list1进行以上等操作,list2不会改变
+            一种叫做非结构性修改,对集合的元素本身进行修改
+            list1.get(0).setBookName("A");
+            此时:
+             list2.get(0).getBookName() ;//A
+-------------------------------------------------------------------------------------------------------------------------------
+知识点3:
+        泛型(Generic):本质:使类型参数化
+        JDK5.0以后,对集合框架中的所有集合的泛型进行了修改,
+        所以我们的JCF是一个类型安全的"容器"
+
+        //JDK5.0之前
+        List list = new ArrayList<>();
+        //没有类型约束,有风险
+        list.add("abc");//OK
+        list.add(1L);//Ok
+        list.add(null);//OK
+        //JDK5.0之后,开始加入泛型概念
+         List<String> list = new ArrayList<String>();
+         容器中就只能添加null和String类型的
+         //JDK7.0以后,<>中不需要指明类型,由编译器自动去匹配
+          List<String> list = new ArrayList<>();
+
+          List<String> strList = new ArrayList<>();//编译时类型是List<String>
+          List<Long> longList = new ArrayList<>();//编译时类型是List<Long>
+
+          注意一点:泛型没有运行时的概念,在运行时它的运行时类型会被"擦除"
+          strList和longList的运行时类型都是java.util.ArrayList;
+          strList.getClass()==longList.getClass()//true;
+
+          正是由于泛型只是编译时期的概念,它不存在多态性
+          Number n = new Integer();
+          List<Number> n = new ArrayList<Integer>();//Error
+
+泛型的通配符  ?
+          List<?> list = new ArrayList<>();
+          list.add(null);//OK
+          list.add("Jack");//Error   此时编译器无法确定器类型
+
+          一般是出现在方法的参数当中
+
+          <? extends 类型>  指明上限
+          <? super 类型>     指明下限
+
+          自定义泛型
+
+          public class Entry<K,V>{
+                private K key;
+                private V value;
+
+          }
+
+          add(Student s)     add(Book b)
+
+          add(T obj)
+ --------------------------------------------------------------------------------------------------------
+知识点4:枚举(enum):它是类型安全的常量
+                                所有的枚举都是继承java.lang.Enum
+                                编译之后也是.class文件
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+在枚举出现之前,我们要想定义一个类型安全的常量是如何定义的?
+        public class Season{
+                public static final Season SPRING  = new Season();
+                  public static final Season SUMER  = new Season();
+                    public static final Season AUTUMN  = new Season();
+                    
+      
+                    public void create(Season s){
+                            ....
+                    }  
+        }
+-------------------------------------------------------------------------------------------------------------
+定义一个枚举:
+        public enum Gender{
+                //枚举值也称为枚举常量
+                //每个枚举常量都是代表当前枚举的一个实例
+                //枚举常量与枚举常量之间用逗号隔开,假如最后一个枚举常量后面没有内容
+                //那么最后一个常量的;可以省略不写
+                  FEMALE("女"),//public static final Gender FEMALE = new Gender("女");
+                  MALE("男");
+             
+             //枚举中可以有普通属性
+              private String sign;
+
+              public void setSign(String sign){
+                    this.sign = sign;
+              }
+              public String getSign(){
+                return this.sign;
+              }
+            
+             //枚举中可以有构造方法,但是必须是私有的
+             private Gender(String sign){
+                    this.sign = sign;
+             }
+             //枚举中可以有普通方法
+             public void method(){}
+
+        }
+        
+        public class Student{
+              private String name;
+              private Gender gender;
+        }
+      Student s = new Student("Jack",Gender.MALE);
+
+      常用方法:values     Gender[]  genders = Gender.values;//获取枚举当中所有的枚举常量
+------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
